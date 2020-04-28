@@ -28,61 +28,59 @@ export class Farm {
       health: 15,
       hunger: 15
     };
-  }
-}
-
-function waterCrop(){
-  this.water += 5;
-  if(this.water >= 25){
-    this.water = 25;
-  }if (this.water <= 0){
-    alive = false;
-  }
-}
-
-function increasePlantAge(){
-  setInterval(() => {
-    this.age++
-    if(this.age = 2){
-      //harvest function
-    }
-    if(this.age > 3){
-      alive=false;
-    }
     
-  },300000)
+  }
+  waterCrop(){
+    this.water += 5;
+    if(this.water >= 25){
+      this.water = 25;
+    }if (this.water <= 0){
+      alive = false;
+    }
+   }
+   
+   increasePlantAge(){
+    setInterval(() => {
+      this.age++
+      if(this.age = 2){
+        //harvest function
+      }
+      if(this.age > 3){
+        alive=false;
+      }
+      
+    },300000)
+  }
+
+  harvest(){
+    if(this.cropOne.age == 2 || this.cropTwo.age == 2 || this.cropThree.age == 2){
+      //push to array
+    }
+    else{
+      //message saying crops arent ready yet
+    }
+  }
 }
 
-function harvest(){
-  if(this.cropOne.age == 2 || this.cropTwo.age == 2 || this.cropThree.age == 2){
-    //push to array
-
-  }
-  else{
-    //message saying crops arent ready yet
-  }
+export class Character{
+ constructor(charName){
+  this.charName = charName;
+  this.isAlive = true;
+  this.xp= 0;
+  this.inventory=[]
+  this.stats = {
+    health: 100,
+    currency: 1500,
+    level: 1,
+    hunger: 0,
+    age: 0
+  };
+ }
 }
 
+  
+  
 
-
-
-
-
-export class Character {
-  constructor(charName){
-    this.charName = charName;
-    this.isAlive = true;
-    this.xp= 0;
-    this.inventory=[]
-    this.stats = {
-      health: 100,
-      currency: 1500,
-      level: 1,
-      hunger: 0,
-      age: 0
-    };
-  }
-}
 
 export class Companion {
   constructor(petName){
