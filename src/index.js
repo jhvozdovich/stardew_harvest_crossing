@@ -1,32 +1,88 @@
 import Phaser from "phaser";
-import logoImg from "./assets/logo.png";
+import farmbg from "./assets/background-image.png";
+import witch from "./assets/farmer.png";
 
 const config = {
   type: Phaser.AUTO,
   parent: "phaser-example",
-  width: 800,
+  width: 600,
   height: 600,
   scene: {
     preload: preload,
-    create: create
+    create: create,
+    update: update
   }
 };
+
+let witchSprite
 
 const game = new Phaser.Game(config);
 
 function preload() {
-  this.load.image("logo", logoImg);
+  this.load.image("farmBackground", farmbg);
+  this.load.image("witch", witch);
 }
 
 function create() {
-  const logo = this.add.image(400, 150, "logo");
-
-  this.tweens.add({
-    targets: logo,
-    y: 450,
-    duration: 2000,
-    ease: "Power2",
-    yoyo: true,
-    loop: -1
-  });
+  let background = this.add.image(300, 300, "farmBackground");
+  background.setScale(.5);
+  witchSprite = this.add.sprite(20, 30, "witch");
 }
+
+function update () {
+  witchSprite.x += 1;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
