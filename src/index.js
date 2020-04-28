@@ -10,8 +10,8 @@ const gameState = {}
 function preload() {
   this.load.image("farmBackground", farmbg);
   this.load.spritesheet("witch", witch, { frameWidth: 62, frameHeight: 83});
-  this.load.image("tile", dirt, {frameWidth: 53, frameHeight: 53});
-  //preload dirt tile 
+  this.load.image("tile", dirt, {frameWidth: 52, frameHeight: 52});
+  //preload dirt tile  ^^^^^ might need to comment out frame width and height
 }
 // let dirtTile = {
 // add: 
@@ -21,13 +21,15 @@ function preload() {
 function create() {
   let background = this.add.image(300, 300, "farmBackground");
   background.setScale(.5);
+  // let tileGrid = new Grid(scene, 0, 0, 600, 600, 54, 54, 0xff0000)
   gameState.witchSprite = this.physics.add.sprite(150, 150, "witch");
-  const platforms = this.physics.add.staticGroup();
-  platforms.create(225, 510, 'platform');
+  // const platforms = this.physics.add.staticGroup(); possible code for barriers
+  // platforms.create(225, 510, 'platform'); // possible code for barriers - needs "platform" collider
   gameState.witchSprite.setCollideWorldBounds(true);
-  this.physics.add.collider(gameState.witchSprite,platforms); 
+  this.physics.add.collider(gameState.witchSprite); 
   gameState.cursors = this.input.keyboard.createCursorKeys();
-  
+  let tileDirt = this.add.image(87, 407, "tile");
+   let tileDirt2 = this.add.image(127, 407, "tile");
   //create dirt tile - stand on tile (contact)
   //blocked tiles can't be dirt
 
