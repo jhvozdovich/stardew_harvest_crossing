@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import farmbg from "./assets/background-image.png";
 import witch from "./assets/farmer-walk.png";
+import dirt from "./assets/grow/dirt.png";
 
 const gameState = {}
 
@@ -9,13 +10,27 @@ const gameState = {}
 function preload() {
   this.load.image("farmBackground", farmbg);
   this.load.spritesheet("witch", witch, { frameWidth: 62, frameHeight: 83});
+  this.load.image("tile", dirt, {frameWidth: 53, frameHeight: 53});
+  //preload dirt tile 
 }
+// let dirtTile = {
+// add: 
+// }
+
 
 function create() {
   let background = this.add.image(300, 300, "farmBackground");
   background.setScale(.5);
-  gameState.witchSprite = this.add.sprite(150, 150, "witch");
+  gameState.witchSprite = this.physics.add.sprite(150, 150, "witch");
+  const platforms = this.physics.add.staticGroup();
+  platforms.create(225, 510, 'platform');
+  gameState.witchSprite.setCollideWorldBounds(true);
+  this.physics.add.collider(gameState.witchSprite,platforms); 
   gameState.cursors = this.input.keyboard.createCursorKeys();
+  
+  //create dirt tile - stand on tile (contact)
+  //blocked tiles can't be dirt
+
 
   this.anims.create({
     key: "left",
@@ -45,9 +60,13 @@ function create() {
     repeat: -1
   });
 
+
 }
 
 function update () {
+
+  //plant picture updating with growth
+
   if (gameState.cursors.right.isDown && gameState.cursors.up.isDown) {
     gameState.witchSprite.x +=3;
     gameState.witchSprite.y -=3;
@@ -83,9 +102,15 @@ function update () {
 
 const config = {
   type: Phaser.AUTO,
-  parent: "phaser-example",
+  parent: "game",
   width: 600,
   height: 600,
+  physics: {
+    default: 'arcade',
+    arcade: {
+      enableBody: true,
+    }
+  },
   scene: {
     preload: preload,
     create: create,
