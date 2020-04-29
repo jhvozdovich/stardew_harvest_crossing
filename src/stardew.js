@@ -187,7 +187,6 @@ upgradeStatus(){
   
   
 
-
 export class Companion {
   constructor(petName){
     this.petName = petName;
@@ -196,11 +195,12 @@ export class Companion {
     this.happy = 25;
     this.bathroom = 0;
     this.hungry = 0;
+    this.alive = true;
   }
 
 
 
-
+//Bathroom Func
   increaseBathroom(){
     setInterval(() => {
       this.bathroom += 1;
@@ -223,6 +223,8 @@ export class Companion {
     this.bathroom = 0;
     this.decreaseHealth(20);
   }
+
+  //Food Func
   increaseHunger(){
     setInterval(() => {
       this.hungry --;
@@ -243,11 +245,19 @@ export class Companion {
       this.hungry = 30;
     }
   }
+
+  //Health Func
   decreaseHealth(num){
     this.health -= num;
     if(this.health <= 0){
       this.alive = false;
       this.health = 0;
+    }
+  }
+  addHealth(num){
+    this.health += num;
+    if(this.health >= 50){
+      this.health = 50;
     }
   }
 }
