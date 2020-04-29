@@ -21,24 +21,25 @@ export class Farm {
     }
     this.cropThree =  {
       alive=true,
-      seedPlanted = false,
       water: 5,
       age:0
     }
-    this.animalOne= {
-     name = name
+    this.animalOne = {
+      health: 15,
+      hunger: 15
     };
     this.animalTwo = {
-     name = name
+      health: 15,
+      hunger: 15
     };
     this.animalThree = {
-     name = name
+      health: 15,
+      hunger: 15
     };
-    
   }
-
-// Plant Functionality
-  planted(){
+    
+  // Plant Functionality
+  planted() {
     if(seedplanted = true){
       increasePlantAge()
     }else{
@@ -111,8 +112,6 @@ export class Character{
    }, 60000)
  }
 
- 
-
  increaseLife() {
    if(this.stats.age <= 3){
      return "Farmer Boy"
@@ -134,8 +133,6 @@ export class Character{
    }
  }
 
-
-
 //  Food Functionality
  eat(){
    this.stats.hunger -=5
@@ -152,8 +149,6 @@ export class Character{
     }
   }, 20000)
 }
-
-
 
 // Level & XP Functionality
 increaseXp(){
@@ -180,12 +175,7 @@ upgradeStatus(){
    return this.status = "Godlike"
  }
 }
-
- 
 }
-
-  
-  
 
 
 export class Companion {
@@ -197,9 +187,6 @@ export class Companion {
     this.bathroom = 0;
     this.hungry = 0;
   }
-
-
-
 
   increaseBathroom(){
     setInterval(() => {
@@ -251,3 +238,4 @@ export class Companion {
     }
   }
 }
+  
