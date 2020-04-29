@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import farmbg from "./assets/background-image.png";
 import witch from "./assets/farmer-walk.png";
 import dirt from "./assets/grow/dirt.png";
+import sprout from "./assets/grow/sprout.png"
 
 const gameState = {}
 
@@ -9,8 +10,9 @@ const gameState = {}
 
 function preload() {
   this.load.image("farmBackground", farmbg);
-  this.load.spritesheet("witch", witch, { frameWidth: 62, frameHeight: 83});
-  this.load.image("tile", dirt, {frameWidth: 52, frameHeight: 52});
+  this.load.spritesheet("witch", witch, { frameWidth: 96, frameHeight: 128});
+  this.load.image("tile", dirt);
+  this.load.image("sprout", sprout);
   //preload dirt tile  ^^^^^ might need to comment out frame width and height
 }
 // let dirtTile = {
@@ -19,8 +21,7 @@ function preload() {
 
 
 function create() {
-  let background = this.add.image(300, 300, "farmBackground");
-  background.setScale(.5);
+  let background = this.add.image(352, 352, "farmBackground");
   // let tileGrid = new Grid(scene, 0, 0, 600, 600, 54, 54, 0xff0000)
   gameState.witchSprite = this.physics.add.sprite(150, 150, "witch");
   // const platforms = this.physics.add.staticGroup(); possible code for barriers
@@ -28,22 +29,23 @@ function create() {
   gameState.witchSprite.setCollideWorldBounds(true);
   this.physics.add.collider(gameState.witchSprite); 
   gameState.cursors = this.input.keyboard.createCursorKeys();
-  let tileDirt = this.add.image(87, 407, "tile");
-  let tileDirt2 = this.add.image(137, 407, "tile");
-  //create dirt tile - stand on tile (contact)
+  let tileDirt = this.add.image(32, 96, "tile");
+  let tileDirt2 = this.add.image(32, 32, "tile");
+  let tileSprout = this.add.image(96, 32, "sprout");
+  //create dirt tile - stand on tile (contact) *** now 64 bit!
   //blocked tiles can't be dirt
 
 
   this.anims.create({
     key: "left",
-    frames: this.anims.generateFrameNumbers("witch", {start: 0, end: 2}),
+    frames: this.anims.generateFrameNumbers("witch", {start: 3, end: 5}),
     frameRate: 5,
     repeat: -1
   });
 
   this.anims.create({
     key: "down",
-    frames: this.anims.generateFrameNumbers("witch", {start: 3, end: 5}),
+    frames: this.anims.generateFrameNumbers("witch", {start: 0, end: 2}),
     frameRate: 5,
     repeat: -1
   });
@@ -51,7 +53,7 @@ function create() {
   this.anims.create({
     key: "up",
     frames: this.anims.generateFrameNumbers("witch", {start: 6, end: 8}),
-    frameRate: 5 ,
+    frameRate: 5,
     repeat: -1
   });
 
@@ -105,8 +107,8 @@ function update () {
 const config = {
   type: Phaser.AUTO,
   parent: "game",
-  width: 600,
-  height: 600,
+  width: 704,
+  height: 704,
   physics: {
     default: 'arcade',
     arcade: {
