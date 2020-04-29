@@ -8,19 +8,19 @@ export class Farm {
     this.seedTwoTotal = 0,
     this.seedThreeTotal = 0,
     this.cropOne = {
-      alive=true,
+      alive = true,
       seedPlaneted=false,
       water: 5,
       age: 0
     }
     this.cropTwo =  {
-      alive=true,
+      alive = true,
       seedPlanted = false,
       water: 5,
       age: 0
     }
     this.cropThree =  {
-      alive=true,
+      alive = true,
       water: 5,
       age:0
     }
