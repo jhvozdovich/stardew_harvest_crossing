@@ -2,40 +2,60 @@ import Phaser from "phaser";
 import farmbg from "./assets/background-image.png";
 import witch from "./assets/farmer-walk.png";
 import dirt from "./assets/grow/dirt.png";
-import sprout from "./assets/grow/sprout.png"
+import sprout from "./assets/grow/sprout.png";
+import sounds from "./assets/mines-themes.mp3";
+import seeds from "./assets/grow/seeds.png";
 
-const gameState = {}
-
-
+const gameState = {
+  num: 0,
+  stageOne: dirt,
+  stageTwo: seeds,
+  stageThree: sprout,
+  counter: 0,
+  music: Audio
+}
 
 function preload() {
   this.load.image("farmBackground", farmbg);
+  this.load.audio('mines-themes', sounds);
   this.load.spritesheet("witch", witch, { frameWidth: 96, frameHeight: 128});
   this.load.image("tile", dirt);
   this.load.image("sprout", sprout);
-  //preload dirt tile  ^^^^^ might need to comment out frame width and height
+  this.load.image("seeds", seeds);
+  this.load.image("dirt", dirt)
 }
-// let dirtTile = {
-// add: 
-// }
-
 
 function create() {
   let background = this.add.image(352, 352, "farmBackground");
-  // let tileGrid = new Grid(scene, 0, 0, 600, 600, 54, 54, 0xff0000)
+  gameState.seedTileOne = this.add.image(150,450,"dirt", gameState.dirt );
+  gameState.seedTileTwo = this.add.image(150, 375,"dirt", gameState.dirt );
+  gameState.seedTileThree = this.add.image(150, 300,"dirt", gameState.dirt  );
   gameState.witchSprite = this.physics.add.sprite(150, 150, "witch");
-  // const platforms = this.physics.add.staticGroup(); possible code for barriers
-  // platforms.create(225, 510, 'platform'); // possible code for barriers - needs "platform" collider
   gameState.witchSprite.setCollideWorldBounds(true);
   this.physics.add.collider(gameState.witchSprite); 
   gameState.cursors = this.input.keyboard.createCursorKeys();
-  let tileDirt = this.add.image(32, 96, "tile");
-  let tileDirt2 = this.add.image(32, 32, "tile");
-  let tileSprout = this.add.image(96, 32, "sprout");
-  //create dirt tile - stand on tile (contact) *** now 64 bit!
-  //blocked tiles can't be dirt
+  gameState.scoreText = this.add.text(450, 18, 'Crop Total:' + gameState.num, { fontSize: '30px', fill: '#FFFFFF' });
+  gameState.counterText = this.add.text(450, 25, 'Counter:'+gameState.counter, { fontSize: '30px', fill: '#FFFFFF' })
+  gameState.music = this.sound.play('mines-themes');
 
+  gameState.seedTileOne.setInteractive();
+  
+  gameState.seedTileOne.on('pointerup', function(){
+    gameState.num += 1
+  });
 
+  gameState.seedTileTwo.setInteractive();
+
+  gameState.seedTileTwo.on('pointerup', function(){
+    gameState.num += 1
+  });
+
+  gameState.seedTileThree.setInteractive();
+ 
+  gameState.seedTileThree.on('pointerup', function(){
+    gameState.num += 1
+  });
+  
   this.anims.create({
     key: "left",
     frames: this.anims.generateFrameNumbers("witch", {start: 3, end: 5}),
@@ -63,14 +83,11 @@ function create() {
     frameRate: 5,
     repeat: -1
   });
-
-
 }
-
+ 
 function update () {
 
-  //plant picture updating with growth
-
+gameState.scoreText.setText('Crop Total:' + gameState.num)
   if (gameState.cursors.right.isDown && gameState.cursors.up.isDown) {
     gameState.witchSprite.x +=3;
     gameState.witchSprite.y -=3;
@@ -103,7 +120,7 @@ function update () {
     gameState.witchSprite.anims.stop();
   }
 }
-
+ 
 const config = {
   type: Phaser.AUTO,
   parent: "game",
