@@ -29,7 +29,7 @@ function create() {
   this.physics.add.collider(gameState.witchSprite); 
   gameState.cursors = this.input.keyboard.createCursorKeys();
   let tileDirt = this.add.image(87, 407, "tile");
-   let tileDirt2 = this.add.image(127, 407, "tile");
+  let tileDirt2 = this.add.image(137, 407, "tile");
   //create dirt tile - stand on tile (contact)
   //blocked tiles can't be dirt
 
