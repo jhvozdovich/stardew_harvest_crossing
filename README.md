@@ -3,63 +3,27 @@
 #### _Epicodus Project, Team Week April 27, 2020_
 
 #### By _**Jessica Hvozdovich, Brevin Cronk, Christine Augustine, Zinfira Safargalieva, Steven Ly**_
+<!-- 
+![Stardew Preview](./img/preview.png)
+
+**[View Live Preview](https://christinereina.github.io/epicodus-mrroboger/)** -->
 
 ## Description
 
-A Phaser 3 project template with ES6 support via [Babel 7](https://babeljs.io/) and [Webpack 4](https://webpack.js.org/)
-that includes hot-reloading for development and production-ready builds.
+_This webpage allows a user to care for plants using using time interval events and an interactive interface built with the Phaser JavaScript framework. We hope to be able to have our character move around the farm as a sprite. We also plan on having APIs involved in our website and making it work alongside our code. There will be fail conditions in the game, such as forgetting to take care of your pets, or allowing your plants to die, etc._
 
-Loading images via JavaScript module `import` is also supported.
+## Setup/Installation Requirements
 
-## Requirements
+1. Clone this repository from GitHub.
+2. Open the downloaded directory in a text editor of your choice.
+  (VSCode, Atom, etc.)
+3. Run npm install in your terminal to download the necessary dependencies, plugins, and modules.
+4. The command npm run start will build and open the compiled code in a browser of your choice using a local host.
 
-[Node.js](https://nodejs.org) is required to install dependencies and run scripts via `npm`.
+## Known Bugs
 
-## Available Commands
-
-| Command | Description |
-|---------|-------------|
-| `npm install` | Install project dependencies |
-| `npm start` | Build project and open web server running project |
-| `npm run build` | Builds code bundle with production settings (minification, uglification, etc..) |
-
-## Writing Code
-
-After cloning the repo, run `npm install` from your project directory. Then, you can start the local development
-server by running `npm start`.
-
-
-After starting the development server with `npm start`, you can edit any files in the `src` folder
-and webpack will automatically recompile and reload your server (available at `http://localhost:8080`
-by default).
-
-## Customizing Template
-
-### Babel
-You can write modern ES6+ JavaScript and Babel will transpile it to a version of JavaScript that you
-want your project to support. The targeted browsers are set in the `.babelrc` file and the default currently
-targets all browsers with total usage over "0.25%" but excludes IE11 and Opera Mini.
-
-  ```
-  "browsers": [
-    ">0.25%",
-    "not ie 11",
-    "not op_mini all"
-  ]
-  ```
-
-### Webpack
-If you want to customize your build, such as adding a new webpack loader or plugin (i.e. for loading CSS or fonts), you can
-modify the `webpack/base.js` file for cross-project changes, or you can modify and/or create
-new configuration files and target them in specific npm tasks inside of `package.json'.
-
-## Deploying Code
-After you run the `npm run build` command, your code will be built into a single bundle located at 
-`dist/bundle.min.js` along with any other assets you project depended. 
-
-If you put the contents of the `dist` folder in a publicly-accessible location (say something like `http://mycoolserver.com`), 
-you should be able to open `http://mycoolserver.com/index.html` and play your game.
-
+There are no known bugs at the time of this update.
+ 
 ## Support and contact details
 
 _Have a bug or an issue with this application? [Open a new issue](https://github.com/jhvozdovich/stardew-harvest-crossing/issues) here on GitHub._
@@ -67,12 +31,33 @@ _Have a bug or an issue with this application? [Open a new issue](https://github
 ## Technologies Used
 
 * HTML
-* CSS with Bootstrap Framework
 * Git and GitHub
-* JavaScript with jQuery Library
+* JavaScript
 * Webpack with Babel, ESLint, and Node Package Manager
-* Jest
 * [Phaser](https://phaser.io/)
+* Tiled
+
+### Specs
+| Spec | Input | Output |
+| :------------- | :------------- | :------------- |
+| **Game displays initial plot of land** | User Input:"Click game link” | Output: “Game begins with empty plot of land” |
+| **User is able to move character sprite with keyboard** | User Input:"Hold-right arrow” | Output: “Sprite moves right” |
+| **User is prevented from crossing game boundaries with keyboard** | User Input:"Hol-right arrow to fence” | Output: “Sprite is still animated but unable to move right ” |
+| **User is able to plant seeds** | User Input:”Plant seed” | Output: “Planted seed display in farm grid” |
+
+| **Plants grow according at set intervals** | User Input:”Wait 30s” | Output: “Sprout display in farm grid” |
+| **User is able to harvest plants** | User Input:”Harvest” | Output: “Plant has been added to inventory” |
+
+### Stretch goals
+ Spec | Input | Output |
+| :------------- | :------------- | :------------- |
+| **Game displays title screen** | User Input:”Click-Start” | Output: “Game begins with empty plot of land”” |
+| **User is able to water plants** | User Input:”Water plant” | Output: “Watered dirt display in farm grid” |
+
+## Resources 
+* [Character Sprites](https://opengameart.org/content/24x32-peppercarrot-characters) by [David Revoy](https://www.davidrevoy.com/)
+* [Background Sprites](https://sondanielson.itch.io/simple-farm-pack) by [sonDanielson](https://sondanielson.itch.io)
+
 
 ### License
 
