@@ -78,6 +78,7 @@ function create() {
   //character physics and navigation
   gameState.witchSprite = this.physics.add.sprite(352, 224, "witch");
   gameState.witchSprite.setCollideWorldBounds(true);
+  gameState.witchSprite.setDepth(5);
   this.physics.add.collider(gameState.witchSprite); 
   gameState.cursors = this.input.keyboard.createCursorKeys();
 
