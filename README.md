@@ -4,9 +4,9 @@
 
 #### By _**Jessica Hvozdovich, Brevin Cronk, Christine Augustine, Zinfira Safargalieva, Steven Ly**_
 
-![Stardew Preview](./src/assets/stardew.png)
+![Stardew Preview](../src/assets/character-faces/witch-face-1.png)
 
-**[View Live Preview](https://trusting-mcnulty-21a430.netlify.app/)**
+**[Play Game](https://trusting-mcnulty-21a430.netlify.app/)**
 
 ## Description
 
