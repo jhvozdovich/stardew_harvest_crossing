@@ -12,6 +12,8 @@ import artichoke from "./assets/grow/artichoke.png";
 import peppers from "./assets/grow/peppers.png";
 import corn from "./assets/grow/corn.png";
 import wateringcan from "./assets/wateringcan.png"
+import chicken from "./assets/chicken.png"
+import scythe from "./assets/scythe.png"
 
 const config = {
   type: Phaser.AUTO,
@@ -37,12 +39,11 @@ const game = new Phaser.Game(config);
 
 
 const gameState = {
-  num: 0,
+  numCrops: 0,
   initialTime: 0,
   stageOne: dirt,
   stageTwo: seeds,
   stageThree: sprout,
-  counter: 0,
   music: Audio
 }
 
@@ -62,6 +63,7 @@ function preload() {
   this.load.image("lettuce", lettuce);
   this.load.image("peppers", peppers);
   this.load.image("wateringcan", wateringcan);
+  this.load.image("scythe", scythe);
 }
 
 function create() {
@@ -77,7 +79,14 @@ function create() {
     loop: true
   });
 
-  gameState.waterButton = this.add.image(832, 100, "wateringcan");
+  gameState.scoreText = this.add.text(450, 2, 'Crop Total:' + gameState.numCrops, { fontSize: '30px', fill: '#FFFFFF' });
+  
+  gameState.seedButton = this.add.image(864, 100, "seeds");
+  gameState.seedButton.setScale(2);
+  gameState.waterButton = this.add.image(864, 300, "wateringcan");
+  gameState.waterButton.setScale(2);
+  gameState.scytheButton = this.add.image(864, 500, "scythe");
+  gameState.scytheButton.setScale(2);
 
   //character physics and navigation
   gameState.witchSprite = this.physics.add.sprite(352, 224, "witch");
@@ -126,8 +135,9 @@ function create() {
       });
       /////////ADD COUNTERS FOR HARVEST INVENTORY
       gameState.seedTiles[j + i*7].on('pointerup', function() {
-        if (gameState.seedTiles[j + i*7].texture.key === "tomato" || gameState.seedTiles[j + i*7].texture.key === "corn" || gameState.seedTiles[j + i*7].texture.key === "artichoke" || gameState.seedTiles[j + i*7].texture.key === "lettuce" || gameState.seedTiles[j + i*7].texture.key === "peppers") {
+        if (gameState.scytheButton.isTinted === true && (gameState.seedTiles[j + i*7].texture.key === "tomato" || gameState.seedTiles[j + i*7].texture.key === "corn" || gameState.seedTiles[j + i*7].texture.key === "artichoke" || gameState.seedTiles[j + i*7].texture.key === "lettuce" || gameState.seedTiles[j + i*7].texture.key === "peppers")) {
           gameState.seedTiles[j + i*7].setTexture("dirt");
+          gameState.numCrops += 1;
         }
       });
     }
@@ -136,15 +146,29 @@ function create() {
   gameState.waterButton.setInteractive();
   gameState.waterButton.on('pointerup', function() {
     gameState.waterButton.setTint(0x6EBF9C);
+    gameState.seedButton.clearTint();
+    gameState.scytheButton.clearTint();
   })
 
-  //score counters
-  gameState.scoreText = this.add.text(450, 2, 'Crop Total:' + gameState.num, { fontSize: '30px', fill: '#FFFFFF' });
-  gameState.counterText = this.add.text(450, 28, 'Counter:'+gameState.counter, { fontSize: '30px', fill: '#FFFFFF' });
+  gameState.seedButton.setInteractive();
+  gameState.seedButton.on('pointerup', function() {
+    gameState.seedButton.setTint(0x6EBF9C);
+    gameState.waterButton.clearTint()
+    gameState.scytheButton.clearTint();
+  })
+
+  gameState.scytheButton.setInteractive();
+  gameState.scytheButton.on('pointerup', function() {
+    gameState.scytheButton.setTint(0x6EBF9C);
+    gameState.waterButton.clearTint()
+    gameState.seedButton.clearTint();
+  })
 
   //timer
   text = this.add.text(32, 32, 'Countdown: ' + formatTime(gameState.initialTime));
   timerEvent = this.time.addEvent({ delay: 1000, callback: onEvent, callbackScope: this, loop: true });
+
+  gameState.scoreText = this.add.text(450, 2, 'Crop Total:' + gameState.numCrops, { fontSize: '30px', fill: '#FFFFFF' })
   
   function formatTime(seconds){
     // Minutes
@@ -175,11 +199,14 @@ function update () {
     });
     //planting
     gameState.seedTiles[i].on('pointerdown', function(){
-      if (gameState.seedTiles[i].texture.key === "dirt") {
+      if (gameState.seedTiles[i].texture.key === "dirt"  && gameState.seedButton.isTinted === true) {
         gameState.seedTiles[i].setTexture("seeds");
       }
     });
     //growing
+    if((gameState.seedTiles[i].texture.key === "dirt"|| gameState.seedTiles[i].texture.key === "tomato" || gameState.seedTiles[i].texture.key === "corn" || gameState.seedTiles[i].texture.key === "artichoke" || gameState.seedTiles[i].texture.key === "lettuce" || gameState.seedTiles[i].texture.key === "peppers") && gameState.initialTime !== 0 && gameState.initialTime % 15 == 0) {
+      gameState.seedTiles[i].clearTint();
+    }
     if(gameState.seedTiles[i].texture.key === "seeds" && gameState.initialTime !== 0 && gameState.initialTime % 15 == 0 && gameState.seedTiles[i].isTinted === true) {
       gameState.seedTiles[i].setTexture("sprout");
       gameState.seedTiles[i].clearTint();
@@ -192,7 +219,7 @@ function update () {
     }
   }
 
-
+  
 
   //navigation
   if (gameState.cursors.right.isDown && gameState.cursors.up.isDown) {
