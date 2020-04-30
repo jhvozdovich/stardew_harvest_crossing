@@ -17,6 +17,8 @@ import witchFace from "./assets/character-faces/witch-face-1.png";
 import witchFace2 from "./assets/character-faces/witch-face-2.png";
 import hills from "./assets/hills.png";
 import stardew from "./assets/stardew.png";
+import egg from "./assets/egg.png";
+import grassEgg from "./assets/grass-egg.png";
 
 const config = {
   type: Phaser.AUTO,
@@ -36,8 +38,8 @@ const config = {
   }
 };
 
-var text;
-var timerEvent
+var timerText;
+var timerEvent;
 const game = new Phaser.Game(config);
 
 
@@ -67,11 +69,13 @@ function preload() {
   this.load.image("peppers", peppers);
   this.load.image("wateringcan", wateringcan);
   this.load.image("scythe", scythe);
-  this.load.spritesheet("chicken", chicken, { frameWidth: 50, frameHeight: 50});
+  this.load.spritesheet("chicken", chicken, { frameWidth: 64, frameHeight: 64});
   this.load.image('witchFace', witchFace);
   this.load.image('witchFace2', witchFace2);
   this.load.image('hills', hills);
   this.load.image('stardew', stardew);
+  this.load.image('egg', egg);
+  this.load.image('grassEgg', grassEgg);
 }
 
 function create() {
@@ -84,14 +88,14 @@ function create() {
   stardew.setDepth(7);
   stardew.setScale(1.2);  
   
-  var witchFace = this.physics.add.image(352, 352, "witchFace");
+  let witchFace = this.physics.add.image(352, 352, "witchFace");
   witchFace.setDepth(8);
   witchFace.setScale(0.5);
   witchFace.setVelocity(200, 200);
   witchFace.setBounce(0.5, 1);
   witchFace.setCollideWorldBounds(true);
 
-  var witchFace2 = this.physics.add.image(672, 352, "witchFace2");
+  let witchFace2 = this.physics.add.image(672, 352, "witchFace2");
   witchFace2.setDepth(8);
   witchFace2.setScale(0.5);
   witchFace2.setVelocity(200, 200);
@@ -107,11 +111,19 @@ function create() {
   });
 
   
+  //platforms.create(600, 400, '');
+  
+  
   //gamedesign
   let background = this.add.image(352, 352, "farmBackground");
   gameState.music = this.sound.play('mines-themes', {
-    loop: true
+    loop: true,
+    volume: 0.1
   });
+  
+  // var platforms = this.physics.add.staticGroup();
+
+  // platforms.create(200, 352, 'farmBackground');
 
   gameState.cropText = this.add.text(760, 620, 'Crop Total:' + gameState.numCrops, { fontSize: '30px', fill: '#FFFFFF' });
   gameState.eggText = this.add.text(760, 650, 'Egg Total:' + gameState.numEggs, { fontSize: '30px', fill: '#FFFFFF' });
@@ -125,15 +137,18 @@ function create() {
 
   //character physics and navigation
   gameState.witchSprite = this.physics.add.sprite(352, 224, "witch");
-  gameState.chickenSprite = this.physics.add.sprite(452, 524, "chicken");
+  gameState.chickenSprite = this.physics.add.sprite(550, 200, "chicken");
   gameState.witchSprite.setCollideWorldBounds(true);
+  //gameState.witchSprite.setBounds(1000, 0, true);
+  //var bounds = new Phaser.Rectangle(100,100,400,400);
   gameState.witchSprite.setDepth(5);
+  // gameState.setBounds(0, 120, 120, 200);
   this.physics.add.collider(gameState.witchSprite); 
   gameState.cursors = this.input.keyboard.createCursorKeys();
 
   this.anims.create ({
     key: "chickenMove",
-    frames: this.anims.generateFrameNumbers ("chicken",{start: 1, end: 12}),
+    frames: this.anims.generateFrameNumbers ("chicken",{start: 0, end: 2}),
     frameRate: 5,
     repeat:-1
   })
@@ -166,17 +181,19 @@ function create() {
     repeat: -1
   });
 
+  // createBlock: function() {
+    
+  // }
 
   //interactable tiles
   gameState.seedTiles = [];
   for (let i = 0; i < 2; i++) {
     for(let j = 0; j < 7; j++) {
-      gameState.seedTiles[j + i*7] = this.add.image(160 + 64*j, 352 + 64*i, "dirt", gameState.seedTiles);
+      gameState.seedTiles[j + i*7] = this.add.image(160 + 64*j, 352 + 64*i, "dirt");
       gameState.seedTiles[j + i*7].setInteractive();
       gameState.seedTiles[j + i*7].on('pointerup', function() {
         gameState.num += 1;
       });
-      /////////ADD COUNTERS FOR HARVEST INVENTORY
       gameState.seedTiles[j + i*7].on('pointerup', function() {
         if (gameState.scytheButton.isTinted === true && (gameState.seedTiles[j + i*7].texture.key === "tomato" || gameState.seedTiles[j + i*7].texture.key === "corn" || gameState.seedTiles[j + i*7].texture.key === "artichoke" || gameState.seedTiles[j + i*7].texture.key === "lettuce" || gameState.seedTiles[j + i*7].texture.key === "peppers")) {
           gameState.seedTiles[j + i*7].setTexture("dirt");
@@ -185,6 +202,16 @@ function create() {
       });
     }
   }
+
+  gameState.eggTile = this.add.image(480, 200, "grassEgg");
+  gameState.eggTile.setInteractive();
+  gameState.eggTile.on('pointerup', function() {
+    if(gameState.eggTile.texture.key === "egg") {
+      gameState.numEggs += 1;
+      gameState.eggTile.setTexture("grassEgg");
+    }
+  })
+
   gameState.waterButton.setInteractive();
   gameState.waterButton.on('pointerup', function() {
     gameState.waterButton.setTint(0x6EBF9C);
@@ -205,9 +232,10 @@ function create() {
     gameState.waterButton.clearTint()
     gameState.seedButton.clearTint();
   })
+  
 
   //timer
-  text = this.add.text(32, 32, 'Countdown: ' + formatTime(gameState.initialTime));
+  timerText = this.add.text(32, 32, 'Countdown: ' + formatTime(gameState.initialTime));
   timerEvent = this.time.addEvent({ delay: 1000, callback: onEvent, callbackScope: this, loop: true });
 
   function formatTime(seconds){
@@ -223,12 +251,13 @@ function create() {
 
   function onEvent() {
       gameState.initialTime += 1; // One second
-      text.setText('Countdown: ' + formatTime(gameState.initialTime));
+      timerText.setText('Countdown: ' + formatTime(gameState.initialTime));
   }
 }
 
 
-function update () {  
+function update () { 
+  
   //plant logic
   for (let i = 0; i < 14; i++) {
     //watering
@@ -259,8 +288,17 @@ function update () {
     }
   }
 
+  // egg logic
+  if(gameState.initialTime % 30 == 0 && gameState.initialTime !== 0) {
+    gameState.eggTile.setTexture("egg");
+  }
+
+  //update totals
+  gameState.cropText.setText('Crop Total:' + gameState.numCrops);
+  gameState.eggText.setText('Egg Total:' + gameState.numEggs);
+
   
-  gameState.chickenSprite.x +=1;
+  gameState.chickenSprite.anims.play('chickenMove', true);
 
   //navigation
   if (gameState.cursors.right.isDown && gameState.cursors.up.isDown) {
