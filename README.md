@@ -4,7 +4,7 @@
 
 #### By _**Jessica Hvozdovich, Brevin Cronk, Christine Augustine, Zinfira Safargalieva, Steven Ly**_
 
-![Stardew Preview](./src/assets/character-faces/witch-face-1.png)
+![Stardew Preview](./src/assets/stardew.png)
 
 **[Play Game](https://ecstatic-franklin-edce6b.netlify.app/)**
 _It does take a minute to load on netlify!_
@@ -23,7 +23,7 @@ _This webpage allows a user to care for plants using using time interval events 
 
 ## Known Bugs
 
-There are no known bugs at the time of this update.
+Working on mechanics to block character motion on house, tree, fence, and toolbar.
  
 ## Support and contact details
 
@@ -65,6 +65,9 @@ _Have a bug or an issue with this application? [Open a new issue](https://github
 * [Crop Tiles](https://opengameart.org/content/lpc-farming-tilesets-magic-animations-and-ui-elements) by Daniel Eddeland
 * [Watering Can](https://stardewvalley.fandom.com/wiki/Watering_Can) from Stardew Valley
 * [Scythe](https://stardewvalley.fandom.com/wiki/Scythe) from Stardew Valley
+* [Music](http://stardew-valley-mines-themes.mp3kurt.net/) Mines Theme from Stardew Valley
+
+http://stardew-valley-mines-themes.mp3kurt.net/
 
 
 ### License
