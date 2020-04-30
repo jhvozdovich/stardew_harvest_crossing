@@ -68,7 +68,6 @@ function create() {
   title.setInteractive();
   title.on('pointerup', function(){
     title.setAlpha(0);
-    console.log("hello");
   });
 
   let background = this.add.image(352, 352, "farmBackground");
@@ -115,8 +114,7 @@ function create() {
   gameState.seedTiles = [];
   for (let i = 0; i < 2; i++) {
     for(let j = 0; j < 7; j++) {
-      gameState.seedTiles[j + i*7] = this.add.image(160 + 64*j, 352 + 64*i, "dirt");
-      gameState.seedTiles[j + i*7].planted = false;
+      gameState.seedTiles[j + i*7] = this.add.image(160 + 64*j, 352 + 64*i, "dirt", gameState.seedTiles);
       gameState.seedTiles[j + i*7].setInteractive();
       gameState.seedTiles[j + i*7].on('pointerup', function(){
         gameState.num += 1;
