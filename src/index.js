@@ -38,7 +38,7 @@ const config = {
   }
 };
 
-var timerText;
+// var timerText;
 var timerEvent;
 const game = new Phaser.Game(config);
 
@@ -235,7 +235,7 @@ function create() {
   
 
   //timer
-  timerText = this.add.text(32, 32, 'Countdown: ' + formatTime(gameState.initialTime));
+  // timerText = this.add.text(32, 32, 'Countdown: ' + formatTime(gameState.initialTime));
   timerEvent = this.time.addEvent({ delay: 1000, callback: onEvent, callbackScope: this, loop: true });
 
   function formatTime(seconds){
@@ -251,7 +251,7 @@ function create() {
 
   function onEvent() {
       gameState.initialTime += 1; // One second
-      timerText.setText('Countdown: ' + formatTime(gameState.initialTime));
+      // timerText.setText('Countdown: ' + formatTime(gameState.initialTime));
   }
 }
 
