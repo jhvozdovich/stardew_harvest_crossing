@@ -4,7 +4,7 @@
 
 #### By _**Jessica Hvozdovich, Brevin Cronk, Christine Augustine, Zinfira Safargalieva, Steven Ly**_
 
-![Stardew Preview](./src/assets/title.png)
+![Stardew Preview](./src/assets/stardew.png)
 
 **[View Live Preview](https://trusting-mcnulty-21a430.netlify.app/)**
 
@@ -43,16 +43,16 @@ _Have a bug or an issue with this application? [Open a new issue](https://github
 | **Game displays initial logo title screen** | User Input:"Click” | Output: “Game begins with empty plot of land” |
 | **User is able to move character sprite with keyboard** | User Input:"Hold-right arrow” | Output: “Sprite moves right” |
 | **User is prevented from crossing game boundaries with keyboard** | User Input:"Hol-right arrow to fence” | Output: “Sprite is still animated but unable to move right ” |
-| **User is able to plant seeds** | User Input:”Click-dirt tile” | Output: “Planted seed display in farm grid” |
-| **Plants grow according at set intervals** | User Input:”Wait 15s” | Output: “Sprout display in farm grid” |
-| **User is able to harvest plants** | User Input:”Click-plant” | Output: “Plant has been added to inventory” |
+| **User is able to plant seeds** | User Input:”Click-seed button Click-dirt tile” | Output: “Planted seed display in farm grid” |
+| **User is able to water plants** | User Input:”Water plant” | Output: “Watered dirt display in farm grid” |
+| **User is able to select a sickle to harvest crops** | User Input:”Click-Sickle, Click-Plant” | Output: “Crop total +1” |
+| **User is able to select a watering can to water crops** | User Input:”Click-Watering can, Click-Plant” | Output: “Watered dirt image displays” |
+| **Plants grow according at set intervals if it has been watered** | User Input:”Wait 15s & Watered” | Output: “Sprout display in farm grid” |
+| **User is able to harvest plants** | User Input:”Click-plant” | Output: “Crop total +1” |
 
 ### Stretch goals
  Spec | Input | Output |
 | :------------- | :------------- | :------------- |
-| **User is able to water plants** | User Input:”Water plant” | Output: “Watered dirt display in farm grid” |
-| **User is able to select a sickle to harvest crops** | User Input:”Click-Sickle, Click-Plant” | Output: “Crop total +1” |
-| **User is able to select a watering can to water crops** | User Input:”Click-Watering can, Click-Plant” | Output: “Watered dirt image displays” |
 | **User is able to select a shovel to return to grass tile** | User Input:”Click-Shovel, Click-Dirt” | Output: “Dirt becomes grass tile” |
 | **User is able to collect eggs from a chicken** | User Input:”Click-Egg” | Output: “Egg total += 1” |
 | **User is able to collect apples from a tree** | User Input:”Click-Apple” | Output: “Apple total += 1” |
@@ -60,8 +60,10 @@ _Have a bug or an issue with this application? [Open a new issue](https://github
 
 ## Resources 
 * [Character Sprites](https://opengameart.org/content/24x32-peppercarrot-characters) by [David Revoy](https://www.davidrevoy.com/)
-* [Background Tiles](https://sondanielson.itch.io/simple-farm-pack) by [sonDanielson](https://sondanielson.itch.io)
-<!-- * [Crop Tiles](https://sondanielson.itch.io/simple-farm-pack) by [sonDanielson](https://sondanielson.itch.io) -->
+* [Background and Farm Tiles](https://sondanielson.itch.io/simple-farm-pack) by [sonDanielson](https://sondanielson.itch.io)
+* [Crop Tiles](https://opengameart.org/content/lpc-farming-tilesets-magic-animations-and-ui-elements) by Daniel Eddeland
+* [Watering Can](https://stardewvalley.fandom.com/wiki/Watering_Can) from Stardew Valley
+* [Scythe](https://stardewvalley.fandom.com/wiki/Scythe) from Stardew Valley
 
 
 ### License

@@ -5,17 +5,23 @@ import dirt from "./assets/grow/dirt.png";
 import sprout from "./assets/grow/sprout.png";
 import sounds from "./assets/mines-themes.mp3";
 import seeds from "./assets/grow/seeds.png";
-import title from "./assets/title.png";
 import tomato from "./assets/grow/tomato.png";
 import lettuce from "./assets/grow/lettuce.png";
 import artichoke from "./assets/grow/artichoke.png";
 import peppers from "./assets/grow/peppers.png";
 import corn from "./assets/grow/corn.png";
+import wateringcan from "./assets/wateringcan.png";
+import chicken from "./assets/chicken.png";
+import scythe from "./assets/scythe.png";
+import witchFace from "./assets/character-faces/witch-face-1.png";
+import witchFace2 from "./assets/character-faces/witch-face-2.png";
+import hills from "./assets/hills.png";
+import stardew from "./assets/stardew.png";
 
 const config = {
-  type: Phaser.CANVAS,
+  type: Phaser.AUTO,
   parent: "game",
-  width: 704,
+  width: 1024,
   height: 704,
   physics: {
     default: 'arcade',
@@ -36,19 +42,18 @@ const game = new Phaser.Game(config);
 
 
 const gameState = {
-  num: 0,
+  numCrops: 0,
+  numEggs: 0,
   initialTime: 0,
   stageOne: dirt,
   stageTwo: seeds,
   stageThree: sprout,
-  counter: 0,
   music: Audio
 }
 
 
 
 function preload() {
-  this.load.image("title", title );
   this.load.image("farmBackground", farmbg);
   this.load.audio('mines-themes', sounds);
   this.load.spritesheet("witch", witch, { frameWidth: 96, frameHeight: 128});
@@ -60,26 +65,78 @@ function preload() {
   this.load.image("corn", corn);
   this.load.image("lettuce", lettuce);
   this.load.image("peppers", peppers);
+  this.load.image("wateringcan", wateringcan);
+  this.load.image("scythe", scythe);
+  this.load.spritesheet("chicken", chicken, { frameWidth: 50, frameHeight: 50});
+  this.load.image('witchFace', witchFace);
+  this.load.image('witchFace2', witchFace2);
+  this.load.image('hills', hills);
+  this.load.image('stardew', stardew);
 }
 
 function create() {
-  //game design
-  let title = this.add.image(352,352, "title");
-  title.setInteractive();
-  title.on('pointerup', function(){
-    title.setAlpha(0);
+  //loading screen
+  let hills = this.add.image(352,352, "hills");
+  hills.setDepth(6);
+  hills.setScale(0.8);
+
+  let stardew = this.add.image(450, 332, 'stardew');
+  stardew.setDepth(7);
+  stardew.setScale(1.2);  
+  
+  var witchFace = this.physics.add.image(352, 352, "witchFace");
+  witchFace.setDepth(8);
+  witchFace.setScale(0.5);
+  witchFace.setVelocity(200, 200);
+  witchFace.setBounce(0.5, 1);
+  witchFace.setCollideWorldBounds(true);
+
+  var witchFace2 = this.physics.add.image(672, 352, "witchFace2");
+  witchFace2.setDepth(8);
+  witchFace2.setScale(0.5);
+  witchFace2.setVelocity(200, 200);
+  witchFace2.setBounce(0.7, 1);
+  witchFace2.setCollideWorldBounds(true);
+
+  hills.setInteractive();
+  hills.on('pointerup', function() {
+    hills.setAlpha(0);
+    witchFace.setAlpha(0);
+    witchFace2.setAlpha(0);
+    stardew.setAlpha(0);   
   });
 
+  
+  //gamedesign
   let background = this.add.image(352, 352, "farmBackground");
   gameState.music = this.sound.play('mines-themes', {
     loop: true
   });
 
+  gameState.cropText = this.add.text(760, 620, 'Crop Total:' + gameState.numCrops, { fontSize: '30px', fill: '#FFFFFF' });
+  gameState.eggText = this.add.text(760, 650, 'Egg Total:' + gameState.numEggs, { fontSize: '30px', fill: '#FFFFFF' });
+
+  gameState.seedButton = this.add.image(864, 100, "seeds");
+  gameState.seedButton.setScale(2);
+  gameState.waterButton = this.add.image(864, 300, "wateringcan");
+  gameState.waterButton.setScale(2);
+  gameState.scytheButton = this.add.image(864, 500, "scythe");
+  gameState.scytheButton.setScale(2);
+
   //character physics and navigation
   gameState.witchSprite = this.physics.add.sprite(352, 224, "witch");
+  gameState.chickenSprite = this.physics.add.sprite(452, 524, "chicken");
   gameState.witchSprite.setCollideWorldBounds(true);
+  gameState.witchSprite.setDepth(5);
   this.physics.add.collider(gameState.witchSprite); 
   gameState.cursors = this.input.keyboard.createCursorKeys();
+
+  this.anims.create ({
+    key: "chickenMove",
+    frames: this.anims.generateFrameNumbers ("chicken",{start: 1, end: 12}),
+    frameRate: 5,
+    repeat:-1
+  })
 
   this.anims.create({
     key: "left",
@@ -116,27 +173,43 @@ function create() {
     for(let j = 0; j < 7; j++) {
       gameState.seedTiles[j + i*7] = this.add.image(160 + 64*j, 352 + 64*i, "dirt", gameState.seedTiles);
       gameState.seedTiles[j + i*7].setInteractive();
-      gameState.seedTiles[j + i*7].on('pointerup', function(){
+      gameState.seedTiles[j + i*7].on('pointerup', function() {
         gameState.num += 1;
-        gameState.seedTiles[j + i*7].planted = true;
       });
       /////////ADD COUNTERS FOR HARVEST INVENTORY
-      gameState.seedTiles[j + i*7].on('pointerup', function(){
-        if (gameState.seedTiles[j + i*7].texture.key === "tomato" || gameState.seedTiles[j + i*7].texture.key === "corn" || gameState.seedTiles[j + i*7].texture.key === "artichoke" || gameState.seedTiles[j + i*7].texture.key === "lettuce" || gameState.seedTiles[j + i*7].texture.key === "peppers") {
+      gameState.seedTiles[j + i*7].on('pointerup', function() {
+        if (gameState.scytheButton.isTinted === true && (gameState.seedTiles[j + i*7].texture.key === "tomato" || gameState.seedTiles[j + i*7].texture.key === "corn" || gameState.seedTiles[j + i*7].texture.key === "artichoke" || gameState.seedTiles[j + i*7].texture.key === "lettuce" || gameState.seedTiles[j + i*7].texture.key === "peppers")) {
           gameState.seedTiles[j + i*7].setTexture("dirt");
+          gameState.numCrops += 1;
         }
       });
     }
   }
+  gameState.waterButton.setInteractive();
+  gameState.waterButton.on('pointerup', function() {
+    gameState.waterButton.setTint(0x6EBF9C);
+    gameState.seedButton.clearTint();
+    gameState.scytheButton.clearTint();
+  })
 
-  //score counters
-  gameState.scoreText = this.add.text(450, 2, 'Crop Total:' + gameState.num, { fontSize: '30px', fill: '#FFFFFF' });
-  gameState.counterText = this.add.text(450, 28, 'Counter:'+gameState.counter, { fontSize: '30px', fill: '#FFFFFF' });
+  gameState.seedButton.setInteractive();
+  gameState.seedButton.on('pointerup', function() {
+    gameState.seedButton.setTint(0x6EBF9C);
+    gameState.waterButton.clearTint()
+    gameState.scytheButton.clearTint();
+  })
+
+  gameState.scytheButton.setInteractive();
+  gameState.scytheButton.on('pointerup', function() {
+    gameState.scytheButton.setTint(0x6EBF9C);
+    gameState.waterButton.clearTint()
+    gameState.seedButton.clearTint();
+  })
 
   //timer
   text = this.add.text(32, 32, 'Countdown: ' + formatTime(gameState.initialTime));
   timerEvent = this.time.addEvent({ delay: 1000, callback: onEvent, callbackScope: this, loop: true });
-  
+
   function formatTime(seconds){
     // Minutes
     var minutes = Math.floor(seconds/60);
@@ -156,22 +229,38 @@ function create() {
 
 
 function update () {  
-  ///WATERED STATUS WITH TIMED "TINT" OR COLOR CHANGE TO BE DARKER
+  //plant logic
   for (let i = 0; i < 14; i++) {
+    //watering
     gameState.seedTiles[i].on('pointerdown', function(){
-      if (gameState.seedTiles[i].texture.key === "dirt") {
-      gameState.seedTiles[i].setTexture("seeds");
+      if (gameState.waterButton.isTinted === true) {
+        gameState.seedTiles[i].setTint(0x998056);
       }
     });
-    if(gameState.seedTiles[i].texture.key === "seeds" && gameState.initialTime !== 0 && gameState.initialTime % 15 == 0) {
-      gameState.seedTiles[i].setTexture("sprout");
+    //planting
+    gameState.seedTiles[i].on('pointerdown', function(){
+      if (gameState.seedTiles[i].texture.key === "dirt"  && gameState.seedButton.isTinted === true) {
+        gameState.seedTiles[i].setTexture("seeds");
+      }
+    });
+    //growing
+    if((gameState.seedTiles[i].texture.key === "dirt"|| gameState.seedTiles[i].texture.key === "tomato" || gameState.seedTiles[i].texture.key === "corn" || gameState.seedTiles[i].texture.key === "artichoke" || gameState.seedTiles[i].texture.key === "lettuce" || gameState.seedTiles[i].texture.key === "peppers") && gameState.initialTime !== 0 && gameState.initialTime % 15 == 0) {
+      gameState.seedTiles[i].clearTint();
     }
-    if(gameState.seedTiles[i].texture.key === "sprout" && gameState.initialTime % 29 == 0) {
+    if(gameState.seedTiles[i].texture.key === "seeds" && gameState.initialTime !== 0 && gameState.initialTime % 15 == 0 && gameState.seedTiles[i].isTinted === true) {
+      gameState.seedTiles[i].setTexture("sprout");
+      gameState.seedTiles[i].clearTint();
+    }
+    if(gameState.seedTiles[i].texture.key === "sprout" && gameState.initialTime % 29 == 0 && gameState.seedTiles[i].isTinted === true) {
       let cropArray = ["tomato", "corn", "lettuce", "artichoke", "peppers"];
       let index = Math.floor(Math.random() * 5)
       gameState.seedTiles[i].setTexture(cropArray[index]);
+      gameState.seedTiles[i].clearTint();
     }
   }
+
+  
+  gameState.chickenSprite.x +=1;
 
   //navigation
   if (gameState.cursors.right.isDown && gameState.cursors.up.isDown) {
