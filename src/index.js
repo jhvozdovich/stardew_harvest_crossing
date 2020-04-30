@@ -63,52 +63,25 @@ function preload() {
 }
 
 function create() {
+  //game design
   let title = this.add.image(352,352, "title");
-  let background = this.add.image(352, 352, "farmBackground");
-
-  gameState.seedTiles = [];
-  for (let i = 0; i < 2; i++) {
-    for(let j = 0; j < 7; j++) {
-      gameState.seedTiles[j + i*7] = this.add.image(160 + 64*j, 352 + 64*i, "dirt");
-      gameState.seedTiles[j + i*7].planted = false;
-      gameState.seedTiles[j + i*7].setInteractive();
-      gameState.seedTiles[j + i*7].on('pointerup', function(){
-        gameState.num += 1;
-        gameState.seedTiles[j + i*7].planted = true;
-      });
-      /////////ADD COUNTERS FOR HARVEST INVENTORY
-      gameState.seedTiles[j + i*7].on('pointerup', function(){
-        if (gameState.seedTiles[j + i*7].texture.key === "tomato" || gameState.seedTiles[j + i*7].texture.key === "corn" || gameState.seedTiles[j + i*7].texture.key === "artichoke" || gameState.seedTiles[j + i*7].texture.key === "lettuce" || gameState.seedTiles[j + i*7].texture.key === "peppers") {
-          gameState.seedTiles[j + i*7].setTexture("dirt");
-        }
-      });
-    }
-  }
-
-
-  gameState.witchSprite = this.physics.add.sprite(352, 224, "witch");
-  gameState.witchSprite.setCollideWorldBounds(true);
-  this.physics.add.collider(gameState.witchSprite); 
-  gameState.cursors = this.input.keyboard.createCursorKeys();
-
-  gameState.scoreText = this.add.text(450, 2, 'Crop Total:' + gameState.num, { fontSize: '30px', fill: '#FFFFFF' });
-  gameState.counterText = this.add.text(450, 28, 'Counter:'+gameState.counter, { fontSize: '30px', fill: '#FFFFFF' });
-  
-  gameState.music = this.sound.play('mines-themes', {
-    loop: true
-  });
-
-  text = this.add.text(32, 32, 'Countdown: ' + formatTime(gameState.initialTime));
- 
-  timerEvent = this.time.addEvent({ delay: 1000, callback: onEvent, callbackScope: this, loop: true });
-  
   title.setInteractive();
   title.on('pointerup', function(){
     title.setAlpha(0);
     console.log("hello");
   });
 
-  
+  let background = this.add.image(352, 352, "farmBackground");
+  gameState.music = this.sound.play('mines-themes', {
+    loop: true
+  });
+
+  //character physics and navigation
+  gameState.witchSprite = this.physics.add.sprite(352, 224, "witch");
+  gameState.witchSprite.setCollideWorldBounds(true);
+  this.physics.add.collider(gameState.witchSprite); 
+  gameState.cursors = this.input.keyboard.createCursorKeys();
+
   this.anims.create({
     key: "left",
     frames: this.anims.generateFrameNumbers("witch", {start: 3, end: 5}),
@@ -136,46 +109,73 @@ function create() {
     frameRate: 5,
     repeat: -1
   });
-}
 
 
-function formatTime(seconds){
-  // Minutes
-  var minutes = Math.floor(seconds/60);
-  // Seconds
-  var partInSeconds = seconds % 60;
-  // Adds left zeros to seconds
-  partInSeconds = partInSeconds.toString().padStart(2,'0');
-  // Returns formated time
-  return `${minutes}:${partInSeconds}`;
-}
-function onEvent ()
-{
-    gameState.initialTime += 1; // One second
-    text.setText('Countdown: ' + formatTime(gameState.initialTime));
-}
+  //interactable tiles
+  gameState.seedTiles = [];
+  for (let i = 0; i < 2; i++) {
+    for(let j = 0; j < 7; j++) {
+      gameState.seedTiles[j + i*7] = this.add.image(160 + 64*j, 352 + 64*i, "dirt");
+      gameState.seedTiles[j + i*7].planted = false;
+      gameState.seedTiles[j + i*7].setInteractive();
+      gameState.seedTiles[j + i*7].on('pointerup', function(){
+        gameState.num += 1;
+        gameState.seedTiles[j + i*7].planted = true;
+      });
+      /////////ADD COUNTERS FOR HARVEST INVENTORY
+      gameState.seedTiles[j + i*7].on('pointerup', function(){
+        if (gameState.seedTiles[j + i*7].texture.key === "tomato" || gameState.seedTiles[j + i*7].texture.key === "corn" || gameState.seedTiles[j + i*7].texture.key === "artichoke" || gameState.seedTiles[j + i*7].texture.key === "lettuce" || gameState.seedTiles[j + i*7].texture.key === "peppers") {
+          gameState.seedTiles[j + i*7].setTexture("dirt");
+        }
+      });
+    }
+  }
 
+  //score counters
+  gameState.scoreText = this.add.text(450, 2, 'Crop Total:' + gameState.num, { fontSize: '30px', fill: '#FFFFFF' });
+  gameState.counterText = this.add.text(450, 28, 'Counter:'+gameState.counter, { fontSize: '30px', fill: '#FFFFFF' });
+
+  //timer
+  text = this.add.text(32, 32, 'Countdown: ' + formatTime(gameState.initialTime));
+  timerEvent = this.time.addEvent({ delay: 1000, callback: onEvent, callbackScope: this, loop: true });
+  
+  function formatTime(seconds){
+    // Minutes
+    var minutes = Math.floor(seconds/60);
+    // Seconds
+    var partInSeconds = seconds % 60;
+    // Adds left zeros to seconds
+    partInSeconds = partInSeconds.toString().padStart(2,'0');
+    // Returns formated time
+    return `${minutes}:${partInSeconds}`;
+  }
+
+  function onEvent() {
+      gameState.initialTime += 1; // One second
+      text.setText('Countdown: ' + formatTime(gameState.initialTime));
+  }
+}
 
 
 function update () {  
-
-  ///ADUST TIMERS FOR MORE STAGGERED GROWTH WATERED STATUS WITH TIMED "TINT" OR COLOR CHANGE TO BE DARKER
+  ///WATERED STATUS WITH TIMED "TINT" OR COLOR CHANGE TO BE DARKER
   for (let i = 0; i < 14; i++) {
     gameState.seedTiles[i].on('pointerdown', function(){
       if (gameState.seedTiles[i].texture.key === "dirt") {
       gameState.seedTiles[i].setTexture("seeds");
       }
     });
-    if(gameState.seedTiles[i].texture.key === "seeds" && gameState.initialTime !== 0 && gameState.initialTime % 9 == 0  && gameState.seedTiles[i].planted == true) {
+    if(gameState.seedTiles[i].texture.key === "seeds" && gameState.initialTime !== 0 && gameState.initialTime % 15 == 0) {
       gameState.seedTiles[i].setTexture("sprout");
     }
-    if(gameState.seedTiles[i].texture.key === "sprout" && gameState.initialTime % 19 == 0) {
+    if(gameState.seedTiles[i].texture.key === "sprout" && gameState.initialTime % 29 == 0) {
       let cropArray = ["tomato", "corn", "lettuce", "artichoke", "peppers"];
       let index = Math.floor(Math.random() * 5)
       gameState.seedTiles[i].setTexture(cropArray[index]);
     }
   }
 
+  //navigation
   if (gameState.cursors.right.isDown && gameState.cursors.up.isDown) {
     gameState.witchSprite.x +=3;
     gameState.witchSprite.y -=3;
