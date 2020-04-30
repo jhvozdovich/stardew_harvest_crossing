@@ -5,15 +5,18 @@ import dirt from "./assets/grow/dirt.png";
 import sprout from "./assets/grow/sprout.png";
 import sounds from "./assets/mines-themes.mp3";
 import seeds from "./assets/grow/seeds.png";
-import title from "./assets/title.png";
 import tomato from "./assets/grow/tomato.png";
 import lettuce from "./assets/grow/lettuce.png";
 import artichoke from "./assets/grow/artichoke.png";
 import peppers from "./assets/grow/peppers.png";
 import corn from "./assets/grow/corn.png";
-import wateringcan from "./assets/wateringcan.png"
-import chicken from "./assets/chicken.png"
-import scythe from "./assets/scythe.png"
+import wateringcan from "./assets/wateringcan.png";
+import chicken from "./assets/chicken.png";
+import scythe from "./assets/scythe.png";
+import witchFace from "./assets/character-faces/witch-face-1.png";
+import witchFace2 from "./assets/character-faces/witch-face-2.png";
+import hills from "./assets/hills.png";
+import stardew from "./assets/stardew.png";
 
 const config = {
   type: Phaser.AUTO,
@@ -40,6 +43,7 @@ const game = new Phaser.Game(config);
 
 const gameState = {
   numCrops: 0,
+  numEggs: 0,
   initialTime: 0,
   stageOne: dirt,
   stageTwo: seeds,
@@ -50,7 +54,6 @@ const gameState = {
 
 
 function preload() {
-  this.load.image("title", title );
   this.load.image("farmBackground", farmbg);
   this.load.audio('mines-themes', sounds);
   this.load.spritesheet("witch", witch, { frameWidth: 96, frameHeight: 128});
@@ -64,23 +67,55 @@ function preload() {
   this.load.image("peppers", peppers);
   this.load.image("wateringcan", wateringcan);
   this.load.image("scythe", scythe);
+  this.load.spritesheet("chicken", chicken, { frameWidth: 50, frameHeight: 50});
+  this.load.image('witchFace', witchFace);
+  this.load.image('witchFace2', witchFace2);
+  this.load.image('hills', hills);
+  this.load.image('stardew', stardew);
 }
 
 function create() {
-  //game design
-  let title = this.add.image(352,352, "title");
-  title.setInteractive();
-  title.on('pointerup', function(){
-    title.setAlpha(0);
+  //loading screen
+  let hills = this.add.image(352,352, "hills");
+  hills.setDepth(6);
+  hills.setScale(0.8);
+
+  let stardew = this.add.image(450, 332, 'stardew');
+  stardew.setDepth(7);
+  stardew.setScale(1.2);  
+  
+  var witchFace = this.physics.add.image(352, 352, "witchFace");
+  witchFace.setDepth(8);
+  witchFace.setScale(0.5);
+  witchFace.setVelocity(200, 200);
+  witchFace.setBounce(0.5, 1);
+  witchFace.setCollideWorldBounds(true);
+
+  var witchFace2 = this.physics.add.image(672, 352, "witchFace2");
+  witchFace2.setDepth(8);
+  witchFace2.setScale(0.5);
+  witchFace2.setVelocity(200, 200);
+  witchFace2.setBounce(0.7, 1);
+  witchFace2.setCollideWorldBounds(true);
+
+  hills.setInteractive();
+  hills.on('pointerup', function() {
+    hills.setAlpha(0);
+    witchFace.setAlpha(0);
+    witchFace2.setAlpha(0);
+    stardew.setAlpha(0);   
   });
 
+  
+  //gamedesign
   let background = this.add.image(352, 352, "farmBackground");
   gameState.music = this.sound.play('mines-themes', {
     loop: true
   });
 
-  gameState.scoreText = this.add.text(450, 2, 'Crop Total:' + gameState.numCrops, { fontSize: '30px', fill: '#FFFFFF' });
-  
+  gameState.cropText = this.add.text(760, 620, 'Crop Total:' + gameState.numCrops, { fontSize: '30px', fill: '#FFFFFF' });
+  gameState.eggText = this.add.text(760, 650, 'Egg Total:' + gameState.numEggs, { fontSize: '30px', fill: '#FFFFFF' });
+
   gameState.seedButton = this.add.image(864, 100, "seeds");
   gameState.seedButton.setScale(2);
   gameState.waterButton = this.add.image(864, 300, "wateringcan");
@@ -90,10 +125,18 @@ function create() {
 
   //character physics and navigation
   gameState.witchSprite = this.physics.add.sprite(352, 224, "witch");
+  gameState.chickenSprite = this.physics.add.sprite(452, 524, "chicken");
   gameState.witchSprite.setCollideWorldBounds(true);
   gameState.witchSprite.setDepth(5);
   this.physics.add.collider(gameState.witchSprite); 
   gameState.cursors = this.input.keyboard.createCursorKeys();
+
+  this.anims.create ({
+    key: "chickenMove",
+    frames: this.anims.generateFrameNumbers ("chicken",{start: 1, end: 12}),
+    frameRate: 5,
+    repeat:-1
+  })
 
   this.anims.create({
     key: "left",
@@ -142,7 +185,6 @@ function create() {
       });
     }
   }
-
   gameState.waterButton.setInteractive();
   gameState.waterButton.on('pointerup', function() {
     gameState.waterButton.setTint(0x6EBF9C);
@@ -168,8 +210,6 @@ function create() {
   text = this.add.text(32, 32, 'Countdown: ' + formatTime(gameState.initialTime));
   timerEvent = this.time.addEvent({ delay: 1000, callback: onEvent, callbackScope: this, loop: true });
 
-  gameState.scoreText = this.add.text(450, 2, 'Crop Total:' + gameState.numCrops, { fontSize: '30px', fill: '#FFFFFF' })
-  
   function formatTime(seconds){
     // Minutes
     var minutes = Math.floor(seconds/60);
@@ -220,6 +260,7 @@ function update () {
   }
 
   
+  gameState.chickenSprite.x +=1;
 
   //navigation
   if (gameState.cursors.right.isDown && gameState.cursors.up.isDown) {
