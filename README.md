@@ -1,12 +1,13 @@
-# _[Stardew Harvest Crossing](https://trusting-mcnulty-21a430.netlify.app/)_
+# _[Stardew Harvest Crossing](https://ecstatic-franklin-edce6b.netlify.app/)_
 
 #### _Epicodus Project, Team Week April 30, 2020_
 
 #### By _**Jessica Hvozdovich, Brevin Cronk, Christine Augustine, Zinfira Safargalieva, Steven Ly**_
 
-![Stardew Preview](../src/assets/character-faces/witch-face-1.png)
+![Stardew Preview](./src/assets/character-faces/witch-face-1.png)
 
-**[Play Game](https://trusting-mcnulty-21a430.netlify.app/)**
+**[Play Game](https://ecstatic-franklin-edce6b.netlify.app/)**
+_It does take a minute to load on netlify!_
 
 ## Description
 
