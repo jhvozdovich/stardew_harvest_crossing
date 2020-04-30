@@ -50,12 +50,12 @@ _Have a bug or an issue with this application? [Open a new issue](https://github
 | **User is able to select a watering can to water crops** | User Input:”Click-Watering can, Click-Plant” | Output: “Watered dirt image displays” |
 | **Plants grow according at set intervals if it has been watered** | User Input:”Wait 15s & Watered” | Output: “Sprout display in farm grid” |
 | **User is able to harvest plants** | User Input:”Click-plant” | Output: “Crop total +1” |
+| **User is able to collect eggs from a chicken** | User Input:”Click-Egg” | Output: “Egg total += 1” |
 
 ### Stretch goals
  Spec | Input | Output |
 | :------------- | :------------- | :------------- |
 | **User is able to select a shovel to return to grass tile** | User Input:”Click-Shovel, Click-Dirt” | Output: “Dirt becomes grass tile” |
-| **User is able to collect eggs from a chicken** | User Input:”Click-Egg” | Output: “Egg total += 1” |
 | **User is able to collect apples from a tree** | User Input:”Click-Apple” | Output: “Apple total += 1” |
 
 
@@ -66,8 +66,6 @@ _Have a bug or an issue with this application? [Open a new issue](https://github
 * [Watering Can](https://stardewvalley.fandom.com/wiki/Watering_Can) from Stardew Valley
 * [Scythe](https://stardewvalley.fandom.com/wiki/Scythe) from Stardew Valley
 * [Music](http://stardew-valley-mines-themes.mp3kurt.net/) Mines Theme from Stardew Valley
-
-http://stardew-valley-mines-themes.mp3kurt.net/
 
 
 ### License
