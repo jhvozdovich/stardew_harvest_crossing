@@ -37,20 +37,6 @@ const gameState = {
   stageTwo: seeds,
   stageThree: sprout,
   counter: 0,
-  planted1: false,
-  planted2: false,
-  planted3: false,
-  planted4: false,
-  planted5: false,
-  planted6: false,
-  planted7: false,
-  planted8: false,
-  planted9: false,
-  planted10: false,
-  planted11: false,
-  planted12: false,
-  planted13: false,
-  planted14: false,
   music: Audio
 }
 
@@ -72,20 +58,21 @@ function create() {
 
   let title = this.add.image(352,352, "title");
   let background = this.add.image(352, 352, "farmBackground");
-  gameState.seedTileOne = this.add.image(160, 352, "dirt", gameState.dirt);
-  gameState.seedTileTwo = this.add.image(224, 352, "dirt", gameState.dirt);
-  gameState.seedTileThree = this.add.image(288, 352, "dirt", gameState.dirt);
-  gameState.seedTileFour = this.add.image(352, 352, "dirt", gameState.dirt);
-  gameState.seedTileFive = this.add.image(416, 352, "dirt", gameState.dirt);
-  gameState.seedTileSix = this.add.image(480, 352, "dirt", gameState.dirt);
-  gameState.seedTileSeven = this.add.image(544, 352, "dirt", gameState.dirt);
-  gameState.seedTileEight = this.add.image(160, 416, "dirt", gameState.dirt);
-  gameState.seedTileNine = this.add.image(224, 416, "dirt", gameState.dirt);
-  gameState.seedTileTen = this.add.image(288, 416, "dirt", gameState.dirt);
-  gameState.seedTileEleven = this.add.image(352, 416, "dirt", gameState.dirt);
-  gameState.seedTileTwelve = this.add.image(416, 416, "dirt", gameState.dirt);
-  gameState.seedTileThirteen = this.add.image(480, 416, "dirt", gameState.dirt);
-  gameState.seedTileFourteen = this.add.image(544, 416, "dirt", gameState.dirt);
+
+  gameState.seedTiles = [];
+  for (let i = 0; i < 2; i++) {
+    for(let j = 0; j < 7; j++) {
+      gameState.seedTiles[j + i*7] = this.add.image(160 + 64*j, 352 + 64*i, "dirt");
+      gameState.seedTiles[j + i*7].planted = false;
+      gameState.seedTiles[j + i*7].setInteractive();
+      gameState.seedTiles[j + i*7].on('pointerup', function(){
+        gameState.num += 1;
+        gameState.seedTiles[j + i*7].planted = true
+      });
+    }
+  }
+  console.log(gameState.seedTiles);
+
   gameState.witchSprite = this.physics.add.sprite(352, 224, "witch");
   gameState.witchSprite.setCollideWorldBounds(true);
   this.physics.add.collider(gameState.witchSprite); 
@@ -101,83 +88,6 @@ function create() {
  
   timerEvent = this.time.addEvent({ delay: 1000, callback: onEvent, callbackScope: this, loop: true })
   
-  gameState.seedTileOne.setInteractive();
-  gameState.seedTileOne.on('pointerup', function(){
-    gameState.num += 1;
-    gameState.planted1 = true
-    game
-  });
-
-  gameState.seedTileTwo.setInteractive();
-  gameState.seedTileTwo.on('pointerup', function(){
-    gameState.num += 1
-    gameState.planted2 = true
-  });
-
-  gameState.seedTileThree.setInteractive();
-  gameState.seedTileThree.on('pointerup', function(){
-    gameState.num += 1
-    gameState.planted3 = true
-  });
-
-  gameState.seedTileFour.setInteractive();
-  gameState.seedTileFour.on('pointerup', function(){
-    gameState.num += 1
-    gameState.planted4 = true
-  });
-
-  gameState.seedTileFive.setInteractive();
-  gameState.seedTileFive.on('pointerup', function(){
-    gameState.num += 1
-    gameState.planted5 = true
-  });
-
-  gameState.seedTileSix.setInteractive();
-  gameState.seedTileSix.on('pointerup', function(){
-    gameState.num += 1
-    gameState.planted6 = true
-  });
-
-  gameState.seedTileSeven.setInteractive();
-  gameState.seedTileSeven.on('pointerup', function(){
-    gameState.num += 1
-  });
-
-  gameState.seedTileEight.setInteractive();
-  gameState.seedTileEight.on('pointerup', function(){
-    gameState.num += 1
-  });
-  
-  gameState.seedTileNine.setInteractive();
-  gameState.seedTileNine.on('pointerup', function(){
-    gameState.num += 1
-  });
-  
-  gameState.seedTileTen.setInteractive();
-  gameState.seedTileTen.on('pointerup', function(){
-    gameState.num += 1
-  });
-  
-  gameState.seedTileEleven.setInteractive();
-  gameState.seedTileEleven.on('pointerup', function(){
-    gameState.num += 1
-  });
-
-  gameState.seedTileTwelve.setInteractive();
-  gameState.seedTileTwelve.on('pointerup', function(){
-    gameState.num += 1
-  });
-
-  gameState.seedTileThirteen.setInteractive();
-  gameState.seedTileThirteen.on('pointerup', function(){
-    gameState.num += 1
-  });
-
-  gameState.seedTileFourteen.setInteractive();
-  gameState.seedTileFourteen.on('pointerup', function(){
-    gameState.num += 1
-  });
-
   title.setInteractive();
   title.on('pointerup', function(){
     title.setAlpha(0);
@@ -235,21 +145,15 @@ function onEvent ()
 
 
 
-function update () {
-
-
-  gameState.seedTileOne.on('pointerup', function(){
-    gameState.seedTileOne.setTexture("seeds");
-    console.log("seeds? " + gameState.seedTileOne.texture.key)
-  });
-    
-
-  if(gameState.seedTileOne.texture.key === "seeds" && gameState.initialTime !== 0 && gameState.initialTime %15 == 0  && gameState.planted1 == true) {
-    gameState.seedTileOne.setTexture("sprout");
-    console.log(gameState.initialTime)
+function update () {  
+  for (let i = 0; i < 14; i++) {
+    gameState.seedTiles[i].on('pointerup', function(){
+      gameState.seedTiles[i].setTexture("seeds");
+    });
+    if(gameState.seedTiles[i].texture.key === "seeds" && gameState.initialTime !== 0 && gameState.initialTime % 15 == 0  && gameState.seedTiles[i].planted == true) {
+      gameState.seedTiles[i].setTexture("sprout");
+    }
   }
-
-  
 
   if (gameState.cursors.right.isDown && gameState.cursors.up.isDown) {
     gameState.witchSprite.x +=3;
