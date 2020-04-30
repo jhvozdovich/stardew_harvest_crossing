@@ -61,9 +61,9 @@ _Have a bug or an issue with this application? [Open a new issue](https://github
 ## Resources 
 * [Character Sprites](https://opengameart.org/content/24x32-peppercarrot-characters) by [David Revoy](https://www.davidrevoy.com/)
 * [Background Tiles](https://sondanielson.itch.io/simple-farm-pack) by [sonDanielson](https://sondanielson.itch.io)
-<!-- * [Crop Tiles](https://sondanielson.itch.io/simple-farm-pack) by [sonDanielson](https://sondanielson.itch.io) -->
+* [Crop Tiles](https://opengameart.org/content/lpc-farming-tilesets-magic-animations-and-ui-elements) by Daniel Eddeland
 
-
+x
 ### License
 
 This software is licensed under the MIT license.
